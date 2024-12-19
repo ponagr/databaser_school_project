@@ -1,0 +1,139 @@
+Lägg till kopplingar mellan brottlingar, gäng, områden
+
+Lägg in CONSTRAINTS och DEFAULT-values
+
+Queries:
+Kunna hämta ut specifika gäng, och se "medlemmar"
+Kunna hämta ut relationer mellan gäng
+Kunna hämta ut gäng i ett visst område/stad
+
+Kunna öppna/skapa en ny utredning
+Kunna ändra/lägga till info till en utredning, lägga till offer/kriminell till en utredning
+Skriva och lägga till "Notes" till utredning
+
+Kunna visa specifika kriminellas info, med brottsregister, domar, pågående utredningar osv
+
+Kunna söka efter specifika brott, och kunna sortera detta efter datum, area eller person(Order by/Group by)
+
+Snygg Utskrift, med radbrytningar/linjer mellan olika "Columner"
+Felhantering i C# vid användarinput(Console.ReadLine)
+
+
+Tabellerna är:
+City:
+Id:int(FK)
+Name:varchar
+
+Area:
+Id:int(PK)
+Name:varchar
+Description:text
+CityId:int(FK)
+
+Adress:
+Id:int(PK)
+Street:varchar
+Zip:varchar
+AreaId:int(FK)
+
+Person:
+Id:int(PK)
+Name:varchar
+DateOfBirth:date
+AdressId:int(FK)
+Gender:int
+
+Gang:
+Id:int(PK)
+Name:varchar
+Description:text
+
+Criminal:
+Id:int(PK)
+PersonId:int(FK)
+Description:text
+GangId:int(FK) NULL
+Status:varchar
+
+Victim:
+Id:int(PK)
+PersonId:int(FK)
+
+Phone:
+Id:int(PK)
+Type:varchar
+Number:varchar
+PersonId:int(FK)
+
+Email:
+Id:int(PK)
+Type:varchar
+Adress:varchar
+PersonId:int(FK)
+
+CrimeRecord:
+Id:int(PK)
+CriminalId:int(FK)
+ConvictionId:int(FK)
+
+Cop:
+Id:int(PK)
+PersonId:int(FK)
+Role:varchar
+
+Investigation:
+Id:int(PK)
+Name:varchar
+Description:text
+CrimeId:int(FK)
+Status:varchar
+
+Crime:
+Id:int(PK)
+Name:Varchar
+Description:text
+
+Note:
+Id:int(PK)
+NoteType:varchar
+NoteDate:date
+Description:text
+CopId:int(FK)
+InvestigationId:int(FK)
+
+CopToInvestigation:
+CopId:int(FK)
+InvestigationId:int(FK)
+
+CriminalToInvestigation:
+CriminalId:int(FK)
+InvestigationId:int(FK)
+
+Conviction:
+Id:int(PK)
+Description:text
+Sentence:varchar
+InvestigationId:int(FK)
+ConvictionDate:date
+VictimId:int(FK) NULL
+
+GangConnections:
+Id:int(PK)
+GangId1:int(FK)
+GangId2:int(FK)
+RelationType:varchar
+
+GangConnectionsNote:
+Id:int(PK)
+NoteType:varchar
+NoteDate:date
+Decription:text
+GangConnectionId:int(FK)
+
+CriminalToGang:
+Id:int(PK)
+CriminalId:int(FK)
+JoinDate:date
+Status:varchar
+CriminalLevel:varchar
+GangId:int(FK)
