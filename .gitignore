@@ -3,6 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# Ignore Connection String .txt file
+connectionString.txt
+
 # dotenv files
 .env
 

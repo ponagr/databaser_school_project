@@ -1,3 +1,15 @@
+Be Gippy om riktiga gäng, och kända personer som tillhör gäng, som bandidos, chicanos osv,
+Be Gippy om färdiga klasser baserat på tabellerna i databasen 
+
+Tog bort Email, Adress och Phone tabellerna, då dessa känns överflödiga och jag kommer inte orka fylla på data i dessa
+Hade missat att lägga till Crimedate i Crime-Tabellen, la även till CityId för att veta var brottet har begåtts
+
+Lägg till Investigations, Convictions och Crimes, Lägg till Notes till Investigation, Ta bort tabell för GangConnectionsNote?
+
+Behöver det finnas en Person, Cop och Criminal tabell, eller räcker det med en Person tabell?
+
+Ta bort CriminalToGang och lägg till nullbart GangId hos Criminal-tabellen istället 
+
 Lägg till kopplingar mellan brottlingar, gäng, områden
 
 Lägg in CONSTRAINTS och DEFAULT-values
@@ -17,6 +29,7 @@ Kunna söka efter specifika brott, och kunna sortera detta efter datum, area ell
 
 Snygg Utskrift, med radbrytningar/linjer mellan olika "Columner"
 Felhantering i C# vid användarinput(Console.ReadLine)
+logga felmeddelanden, (spara i fil, istället för att skriva ut i konsoll)
 
 
 Tabellerna är:
