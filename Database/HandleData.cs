@@ -1,0 +1,2 @@
+//Lägg till klass som hanterar data, och som har metoder för att hämta data från databasen, och skriva data till databasen
+//Ska hantera alla klasser som existerar, och ha färdiga stored procedures för att hämta data från databasen
