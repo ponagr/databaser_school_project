@@ -154,3 +154,189 @@ SELECT * FROM Crime
 --Starta ny utredning för ett brott
 --Lägg till ny Note till investigation
 
+-----------------------------------------------------
+
+
+--Queries
+--10 st queries, 3 joins, 1 AVG/SUM/COUNT
+
+--Hämta ut alla brott vid ett specifikt datum för en specifik stad
+SELECT Crime.Name, Description, CrimeDate
+FROM Crime
+JOIN City ON Crime.CityId = City.Id AND City.Name = 'Sandviken'
+WHERE CrimeDate BETWEEN '2021-06-06' AND '2021-08-06';
+--Kunna lägga in egna värden vid City.Name och CrimeDate för att söka efter någon specifikt
+
+
+
+SELECT * FROM Crime
+
+UPDATE Crime 
+SET CrimeDate =  '2022-08-21'
+WHERE Id = 3
+
+ALTER TABLE Crime
+ADD CityId INT 
+FOREIGN KEY (CityId) REFERENCES City(Id)
+
+SELECT * FROM City
+
+SELECT * FROM Gang
+
+
+SELECT * FROM Person
+
+--Hämta ut alla kriminella som är involverade i ett specifikt gäng
+SELECT p.Name, p.DateOfBirth, c.Description AS PersonDescription, c.Status, g.Name AS Gang, g.Description AS GangDescription
+FROM Person p
+JOIN Criminal c ON p.Id = c.PersonId
+JOIN Gang g ON c.GangId = g.Id AND g.Name LIKE 'g%'
+
+
+
+--Hämta ut alla gäng som är aktiva i en specifik stad
+SELECT g.Name AS Gang, City.Name AS ActiveCity, g.Description AS GangDescription
+FROM Person p
+JOIN Criminal c ON p.Id = c.PersonId
+JOIN Gang g ON g.Id = c.GangId
+JOIN GangToCity GToC ON g.Id = GToC.GangId
+JOIN City ON GToC.CityId = City.Id AND City.Name = 'Sandviken'
+
+
+
+--Hämta ut brottsregister för en specifik kriminell
+SELECT *
+FROM Criminal c
+JOIN CrimeRecord cr ON cr.CriminalId = c.Id
+JOIN Person p ON p.Id = c.PersonId
+JOIN CriminalToInvestigation CtI ON CtI.CriminalId = c.Id
+JOIN Investigation i ON i.Id = CtI.InvestigationId
+JOIN Crime ON Crime.Id = i.CrimeId
+JOIN Conviction co ON co.InvestigationId = i.Id
+
+
+--Visa aktiva utredningar där en specifik kriminell är involverad
+SELECT * 
+FROM Investigation i
+JOIN CriminalToInvestigation CtI ON CtI.InvestigationId = i.Id 
+JOIN Criminal c ON c.Id = CtI.CriminalId
+JOIN Person p ON p.Id = c.PersonId
+WHERE i.[Status] = 'Ongoing' AND p.Name LIKE 'm%'
+
+--Visa aktiva utredningar där en specifik polis är involverad
+SELECT * 
+FROM Investigation i
+JOIN CopToInvestigation CtI ON CtI.InvestigationId = i.Id 
+JOIN Cop c ON c.Id = CtI.CopId
+JOIN Person p ON p.Id = c.PersonId
+WHERE i.[Status] = 'Ongoing' AND p.Name LIKE 'e%'
+
+
+
+--Visa ALLA(aktiva och avslutade) utredningar där en specifik kriminell är involverad
+SELECT * 
+FROM Investigation i
+JOIN CriminalToInvestigation CtI ON CtI.InvestigationId = i.Id 
+JOIN Criminal c ON c.Id = CtI.CriminalId
+JOIN Person p ON p.Id = c.PersonId
+WHERE p.Name LIKE 'm%'
+
+--Visa ALLA(aktiva och aslutade) utredningar där en specifik polis är involverad
+SELECT * 
+FROM Investigation i
+JOIN CopToInvestigation CtI ON CtI.InvestigationId = i.Id 
+JOIN Cop c ON c.Id = CtI.CopId
+JOIN Person p ON p.Id = c.PersonId
+WHERE p.Name LIKE 'e%'
+
+--Visa kopplingar mellan olika gäng
+JOIN GangConnections gc ON gc.GangId1 = g.Id AND gc.GangId2 = g.Id 
+GROUP BY g.Name, gc.RelationType
+
+--Visa all info om en specifik kriminell
+SELECT p.Name, p.Gender, p.DateOfBirth, cr.[Status], cr.[Description], g.Name AS Gang
+FROM Person p 
+JOIN Criminal cr ON cr.PersonId = p.Id
+JOIN Gang g ON g.Id = cr.GangId
+WHERE p.Id = 1
+
+--Visa all info om ett specifikt gäng
+SELECT g.Name, COUNT(c.Name) AS ActiveCitys, COUNT(p.Name) AS Members
+FROM Person p 
+JOIN Criminal cr ON cr.PersonId = p.Id
+JOIN Gang g ON g.Id = cr.GangId
+JOIN GangToCity GtC ON GtC.GangId = g.Id
+JOIN City c ON c.Id = GtC.CityId
+GROUP BY g.Name
+
+
+--AVG för hur många gäng som är aktiva i varje stad
+SELECT c.Name, COUNT(g.Name) AS ActiveGangs
+FROM Gang g
+JOIN GangToCity GtC ON GtC.GangId = g.Id
+JOIN City c ON c.Id = GtC.CityId
+GROUP BY c.Name
+
+
+--SUM för hur många kriminella varje gäng har
+SELECT g.Name, COUNT(p.Name) AS Members
+FROM Person p 
+JOIN Criminal c ON c.PersonId = p.Id
+JOIN Gang g ON g.Id = c.GangId
+GROUP BY g.Name
+
+
+
+--SUM för hur många brott varje kriminell är dömd för(CrimeRecord)
+SELECT p.Name, COUNT(cr.Id) AS Convictions          --KOPPLA CrimeRecord till Conviction
+FROM Criminal c
+JOIN CrimeRecord cr ON cr.CriminalId = c.Id
+JOIN Person p ON p.Id = c.PersonId
+JOIN CriminalToInvestigation CtI ON CtI.CriminalId = c.Id
+JOIN Investigation i ON i.Id = CtI.InvestigationId
+JOIN Crime ON Crime.Id = i.CrimeId
+JOIN Conviction co ON co.InvestigationId = i.Id
+GROUP BY p.Name
+
+
+SELECT * FROM Crime
+SELECT * FROM City
+
+--Registera nytt brott
+--Lägg till person
+--Starta ny utredning för ett brott
+--Lägg till ny Note till investigation
+
+SELECT * FROM Crime
+
+SELECT * FROM Investigation
+SELECT * FROM Person
+JOIN Criminal ON Criminal.PersonId = Person.Id
+
+SELECT * FROM CriminalToInvestigation
+
+INSERT INTO CriminalToInvestigation(CriminalId, InvestigationId)
+VALUES(4,4), (5,6), (6, 9), (7,10), (7,5), (5,8), (5,7), (4,7), (6,7), (8,8), (9,8), (10,8)
+
+INSERT INTO Crime(Name, [Description], CrimeDate, CityId)
+VALUES('Posession of Drugs', 'Caught with drugs', '2023-10-24', 1), ('Posession of Drugs', 'Caught with drugs', '2024-10-24', 6)
+
+INSERT INTO Investigation(Name, [Description], CrimeId, [Status])
+VALUES ('Posession of Drugs', '?', 9, 'Closed'), ('Posession of Drugs', '?', 10, 'Closed')
+
+SELECT * FROM Person 
+JOIN Cop ON Cop.PersonId = Person.Id 
+SELECT * FROM Investigation
+
+INSERT INTO CopToInvestigation(CopId, InvestigationId)
+VALUES(1,4), (1,5), (3,9), (3,10), (2,5), (2,9), (1,6), (1,7), (3,7), (1,8)
+
+
+SELECT * FROM Investigation
+SELECT * FROM Note
+
+SELECT * FROM Conviction
+
+INSERT INTO CrimeRecord(CriminalId, ConvictionId)
+VALUES()
+
