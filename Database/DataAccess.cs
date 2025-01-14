@@ -13,7 +13,7 @@ class DatabaseFunctions
     public IEnumerable<T> Select<T, U>(string storedProcedure, U parameters)
     {
         using IDbConnection db = Connect();
-        return db.Query<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+        return db.Query<T>(storedProcedure, parameters, commandType: CommandType.Text);
         //($"SELECT {parameters} FROM {typeof(T).Name}").ToList();
     }
 
