@@ -6,4 +6,4 @@
 - Creating database 
 - Creating tables
 - inserting, altering and selecting data with queries
-- Accessing and handling data in database from C# with Dapper
+- Accessing and handling data in database with C# with Dapper
